@@ -32,7 +32,7 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
   };
 
   const handleBlurSetPropertyOther = (e: React.FocusEvent<HTMLInputElement>) => {
-    dispatch(setData({ key: property.name, value: e.target.value }));
+    dispatch(setData({ key: `${property.name} Other`, value: e.target.value }));
   }
   return (
     <>
