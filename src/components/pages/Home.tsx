@@ -31,6 +31,9 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
     setSelectedProperty(val);
   };
 
+  const handleBlurSetPropertyOther = (e: React.FocusEvent<HTMLInputElement>) => {
+    dispatch(setData({ key: property.name, value: e.target.value }));
+  }
   return (
     <>
       <Autocomplete
@@ -47,7 +50,7 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
         <input
           placeholder="Other..."
           className="h-max rounded-lg border-none py-2 px-3 text-sm leading-5 text-gray-900 focus:outline-none"
-          onChange={() => handleSetProperty(selectedProperty)}
+          onBlur={handleBlurSetPropertyOther}
         />
       )}
     </>
