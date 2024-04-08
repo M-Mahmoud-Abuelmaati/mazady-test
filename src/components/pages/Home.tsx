@@ -24,6 +24,8 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
     skip: !selectedProperty,
   });
 
+  const options = optionsData?.data;
+
   const handleSetProperty = (val: ICategoryChild) => {
     dispatch(setData({ key: property.name, value: val.name }));
     setSelectedProperty(val);
@@ -36,9 +38,17 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
         placeholder={property.name}
         onChange={handleSetProperty}
       />
-      {optionsData?.data.map((option) => (
+
+      {options?.map((option) => (
         <PropertyItem key={option.id} property={option} />
       ))}
+
+      {selectedProperty?.name === "Other" && (
+        <input
+          placeholder="Other..."
+          className="h-max rounded-lg border-none py-2 px-3 text-sm leading-5 text-gray-900 focus:outline-none"
+        />
+      )}
     </>
   );
 };
@@ -54,7 +64,10 @@ const SubCategoryItems = ({
       skip: !selectedSubCategoryId,
     }
   );
-  const properties = subCategoriesProperties?.data;
+  const properties = subCategoriesProperties?.data.map((property) => ({
+    ...property,
+    options: [...property.options, { id: 999999, name: "Other" }] as unknown as ICategoryChild['options'],
+  }));
 
   return (
     <>
@@ -85,26 +98,7 @@ const Home = ({}: HomeProps) => {
 
   const handleSetCategory = (val: ICategory) => {
     dispatch(setData({ key: "Main Category", value: val.name }));
-    setSelectedCategory({
-      ...val,
-      ...(val.children !== null && val.children.length
-        ? {
-            children: [
-              ...val.children,
-              {
-                id: 999999999,
-                name: "Other",
-                children: null,
-                circle_icon: "",
-                description: null,
-                disable_shipping: 0,
-                image: "",
-                slug: "",
-              },
-            ],
-          }
-        : {}),
-    });
+    setSelectedCategory(val);
   };
 
   const handleSetSubCategory = (val: ICategory) => {
@@ -132,12 +126,6 @@ const Home = ({}: HomeProps) => {
         <SubCategoryItems selectedSubCategoryId={selectedSubCategory.id} />
       )}
 
-      {selectedSubCategory?.name === "Other" && (
-        <input
-          placeholder="Other..."
-          className="h-max rounded-lg border-none py-2 pl-3  text-sm leading-5 text-gray-900 focus:outline-none"
-        />
-      )}
       <button
         className="bg-white text-black px-4 py-2 rounded-lg"
         onClick={handleSubmit}
