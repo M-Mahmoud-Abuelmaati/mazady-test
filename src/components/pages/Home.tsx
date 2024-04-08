@@ -47,6 +47,7 @@ const PropertyItem = ({ property }: { property: ICategoryChild }) => {
         <input
           placeholder="Other..."
           className="h-max rounded-lg border-none py-2 px-3 text-sm leading-5 text-gray-900 focus:outline-none"
+          onChange={() => handleSetProperty(selectedProperty)}
         />
       )}
     </>
